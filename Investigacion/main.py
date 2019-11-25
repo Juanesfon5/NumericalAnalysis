@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.metrics import accuracy_score
 
 samplerate, samples = wavfile.read('canciones/hakuna_matata.wav')
-samples = samples[5000000:5000100]
+samples = samples[5000000:5002000]
 newsamples = samples.copy()
 damage.noiseadd(newsamples, 0.7, 0.3)
 matches = recognize.cheat(samples, newsamples, false_positives=0.04, false_negatives=0.1)
@@ -24,7 +24,7 @@ x, y = utils.tovalidxy(newsamples, matches)
 x = np.array(x).reshape((-1, 1))
 y = np.array(y)
 
-number = 5 #Number of segments
+number = 100 #Number of segments
 counter = 0
 x_poly = []
 y_poly_pred = []
@@ -56,7 +56,6 @@ while counter < number:
         lastAuxY = auxY[0:3]
         auxX2 = divX[counter - 1]
         initAuxX = auxX2[-3:]
-        print(counter)
         auxY2 = y_poly_pred[counter-1]
         initAuxY = auxY2[-3:]
         xAux.append(initAuxX)
@@ -88,6 +87,8 @@ plt.plot(samples, label='real')
 while  counter < number :
     plt.plot(divX[counter], y_poly_pred[counter], color='y')
     counter = counter + 1
+
+print("Division en ", number, " segmentos")
 
 for s in range(len(x_poly)):
     rmse = np.sqrt(mean_squared_error(ySD[s],y_poly_pred[s]))
